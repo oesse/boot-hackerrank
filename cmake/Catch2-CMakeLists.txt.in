@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.10)
+project(catch2-download NONE)
+
+include(ExternalProject)
+ExternalProject_Add(catch2
+  PREFIX ${CATCH2_DOWNLOAD_PREFIX}
+  URL https://raw.githubusercontent.com/catchorg/Catch2/v${CATCH2_VERSION}/single_include/catch.hpp
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  DOWNLOAD_NO_EXTRACT 1
+  INSTALL_COMMAND 
+    ${CMAKE_COMMAND} -E copy 
+    ${CATCH2_DOWNLOAD_PREFIX}/src/catch.hpp 
+    ${CATCH2_INSTALL_PREFIX}/include/catch.hpp
+)
+
