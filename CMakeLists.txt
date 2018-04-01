@@ -28,3 +28,10 @@ AddUnitTests(Solution
   TEST_CASES
   solution_test.cpp
   )
+
+
+AddE2ETests(SolutionRunner
+  DIRECTORY test/e2e
+  TEST_CASES
+  basic_solution.io
+  )
