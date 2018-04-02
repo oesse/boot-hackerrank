@@ -30,8 +30,8 @@ AddUnitTests(Solution
   )
 
 
-AddE2ETests(SolutionRunner
-  DIRECTORY test/e2e
+AddIoTests(SolutionRunner
+  DIRECTORY test/io
   TEST_CASES
   basic_solution.io
   )
