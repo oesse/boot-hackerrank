@@ -7,6 +7,7 @@ if(ENABLE_COVERAGE)
     OUTPUT coverage.info
     COMMAND ${LCOV} --capture --directory . --output-file coverage-tmp.info
     COMMAND ${LCOV} --remove coverage-tmp.info '/usr/*' '*/test/*' '*/catch/*' --output-file coverage.info
+    COMMAND ${LCOV} --list coverage.info
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     MAIN_DEPENDENCY test
     )
@@ -18,5 +19,6 @@ if(ENABLE_COVERAGE)
     MAIN_DEPENDENCY coverage.info
     )
 
-  add_custom_target(coverage DEPENDS coverage/index.html)
+  add_custom_target(coverage DEPENDS coverage.info)
+  add_custom_target(coverage-html DEPENDS coverage/index.html)
 endif()
