@@ -9,7 +9,6 @@ if(ENABLE_COVERAGE)
     COMMAND ${LCOV} --remove coverage-tmp.info '/usr/*' '*/test/*' '*/catch/*' --output-file coverage.info
     COMMAND ${LCOV} --list coverage.info
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    MAIN_DEPENDENCY test
     )
 
   add_custom_command(
