@@ -1,0 +1,45 @@
+language: cpp
+
+common_sources: &all_sources
+  - ubuntu-toolchain-r-test
+
+matrix:
+  - os: linux
+    compiler: gcc
+    addons: &gcc7
+      apt:
+        sources: *all_sources
+        packages: ['lcov', 'g++-7']
+    env: COMPILER='g++-7' COVERAGE=1
+
+install:
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      CMAKE_URL="http://www.cmake.org/files/v3.10/cmake-3.3.2-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+    elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+        which cmake || brew install cmake;
+    fi
+    cmake --version | head -n1
+
+before_script:
+  - export CXX=${COMPILER} CXXFLAGS="-Wall -Wextra -Wconversion -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wcast-qual -Wunused -Woverloaded-virtual -pedantic"
+  - cd ${TRAVIS_BUILD_DIR}
+
+  - cmake -H. -BBuild-Debug -DCMAKE_BUILD_TYPE=Debug -Wdev -DENABLE_COVERAGE=${COVERAGE} -DENABLE_CPPCHECK=${CPPCHECK}
+  - cmake -H. -BBuild-Release -DCMAKE_BUILD_TYPE=Release -Wdev
+
+script: 
+  - cd Build-Debug
+  - make -j 2
+  - CTEST_OUTPUT_ON_FAILURE=1 ctest -j 2
+  - |
+    if [[ "${COVERAGE}" == "1" ]]; then
+      make coverage
+    fi
+  - cd ../Build-Release
+  - make -j 2
+  - CTEST_OUTPUT_ON_FAILURE=1 ctest -j 2
