@@ -23,7 +23,14 @@ if(BUILD_TESTING)
       endif()
 
       add_executable(${target} ${source})
+      if(ENABLE_COVERAGE)
+        set_target_properties(${target}
+          PROPERTIES 
+          COMPILE_FLAGS "${CMAKE_CXX_FLAGS} --coverage"
+          LINK_FLAGS "--coverage")
+      endif()
       target_link_libraries(${target} PRIVATE ${library} CatchMain)
+
       add_test(NAME ${target} COMMAND ${target})
     endforeach()
   endfunction()
@@ -38,6 +45,14 @@ if(BUILD_TESTING)
       "${oneValueArgs}"
       "${multiValueArgs}" 
       ${ARGN})
+
+
+    if(ENABLE_COVERAGE)
+      set_target_properties(${executable}
+        PROPERTIES 
+        COMPILE_FLAGS "${CMAKE_CXX_FLAGS} --coverage"
+        LINK_FLAGS "--coverage")
+    endif()
 
     foreach(test_source ${ADD_TESTS_ARGS_TEST_CASES})
       string(REGEX REPLACE "\.cpp$" "" target ${test_source})

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(boot-hackerrank)
 
 option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" FALSE)
+option(ENABLE_COVERAGE "Enable generation of coverage reports" FALSE)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -21,6 +22,7 @@ add_executable(SolutionRunner src/main.cpp)
 target_link_libraries(SolutionRunner PRIVATE Solution)
 
 include(Testing)
+include(Coverage)
 include(CppCheck)
 
 AddUnitTests(Solution
