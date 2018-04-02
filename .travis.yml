@@ -4,13 +4,14 @@ common_sources: &all_sources
   - ubuntu-toolchain-r-test
 
 matrix:
-  - os: linux
-    compiler: gcc
-    addons: &gcc7
-      apt:
-        sources: *all_sources
-        packages: ['lcov', 'g++-7']
-    env: COMPILER='g++-7' COVERAGE=1
+  include:
+    - os: linux
+      compiler: gcc
+      addons: &gcc7
+        apt:
+          sources: *all_sources
+          packages: ['lcov', 'g++-7']
+      env: COMPILER='g++-7' COVERAGE=1
 
 install:
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
